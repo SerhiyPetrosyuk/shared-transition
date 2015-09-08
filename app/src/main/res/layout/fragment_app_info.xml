@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_info_bg"
-    android:clickable="true"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:clickable="true">
 
     <ImageView
         android:id="@+id/iv_app_icon"
@@ -19,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_app_icon"
         android:orientation="vertical"
+        android:padding="16dp"
         android:visibility="invisible">
 
         <TextView

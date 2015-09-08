@@ -84,6 +84,7 @@ public class AppListFragment extends Fragment implements AppListView {
         mPresenter.getAppList();
     }
 
+
     @Override
     public void showAppList(List<ApplicationInfo> applicationInfoList) {
         mAppsAdapter.setData(applicationInfoList);

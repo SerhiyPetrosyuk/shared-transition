@@ -15,4 +15,5 @@ public interface AppsPresenter {
     void clearCache();
 
     void openAppInfo(int position, View imageView);
+
 }

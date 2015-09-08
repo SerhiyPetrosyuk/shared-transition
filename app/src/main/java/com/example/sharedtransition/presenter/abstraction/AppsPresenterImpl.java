@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.sharedtransition.Constants;
 import com.example.sharedtransition.presenter.implementation.AppsPresenter;
@@ -50,9 +51,6 @@ public class AppsPresenterImpl implements AppsPresenter {
     public void openAppInfo(int position, View imageView) {
         int [] viewLocation = new int[2];
         imageView.getLocationOnScreen(viewLocation);
-        viewLocation[0] -= imageView.getLeft();
-        viewLocation[1] -= imageView.getTop();
-
         Bundle appData = new Bundle();
         appData.putParcelable(Constants.APP_INFO, mApplicationInfoList.get(position));
         appData.putIntArray(Constants.VIEW_POSITION, viewLocation);

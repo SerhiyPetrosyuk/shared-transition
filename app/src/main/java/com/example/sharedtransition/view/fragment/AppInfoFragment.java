@@ -1,12 +1,25 @@
 package com.example.sharedtransition.view.fragment;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,8 +43,7 @@ public class AppInfoFragment extends Fragment {
     TextView mAppDescription;
     @InjectView(R.id.ll_app_info_holder)
     LinearLayout mAppInfoHolder;
-    private TransitionDrawable mFragmentBackgroundDrawable;
-    private AnimationHelper mAnimationHelper;
+
 
     public static AppInfoFragment newInstance(Bundle appInfoData) {
         AppInfoFragment appInfoFragment = new AppInfoFragment();
@@ -47,39 +59,88 @@ public class AppInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         ((Application) getActivity().getApplication()).inject(this);
-        mAnimationHelper = new AnimationHelper();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View appInfoView = inflater.inflate(R.layout.fragment_app_info, container, false);
-        ButterKnife.inject(this, appInfoView);
-        mFragmentBackgroundDrawable = (TransitionDrawable) appInfoView.getBackground();
+        final View view = inflater.inflate(R.layout.fragment_app_info, container, false);
+        ButterKnife.inject(this, view);
         Bundle appInfoData = getArguments();
         ApplicationInfo applicationInfo = appInfoData.getParcelable(Constants.APP_INFO);
-        int[] imageLocation = appInfoData.getIntArray(Constants.VIEW_POSITION);
+        final int[] imageLocation = appInfoData.getIntArray(Constants.VIEW_POSITION);
+
+        ArgbEvaluator colorEvaluator = new ArgbEvaluator();
+        final ObjectAnimator colorAnimator = ObjectAnimator.ofObject(view, "backgroundColor", colorEvaluator,
+                0, 0);
+        colorAnimator.setObjectValues(Color.TRANSPARENT, Color.WHITE);
+        colorAnimator.setDuration(300);
+        colorAnimator.start();
+
+        colorAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mAppInfoHolder.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
         if (applicationInfo != null && imageLocation != null) {
             mAppIcon.setImageDrawable(applicationInfo.loadIcon(getActivity().getPackageManager()));
             mAppName.setText(applicationInfo.loadLabel(getActivity().getPackageManager()));
             mAppDescription.setText(applicationInfo.loadDescription(getActivity().getPackageManager()));
             mAppPackage.setText(applicationInfo.packageName);
-            mAppIcon.setTranslationX(imageLocation[0]);
-            mAppIcon.setTranslationY(imageLocation[1]);
         }
 
-        return appInfoView;
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onGlobalLayout() {
+                int[] imagePosition = new int[2];
+                mAppIcon.getLocationOnScreen(imagePosition);
+                int startPosition = imagePosition[0];
+                mAppIcon.setTranslationX(imageLocation[0] - imagePosition[0]);
+                mAppIcon.setTranslationY(imageLocation[1] - imagePosition[1]);
+
+                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                int height = size.y;
+
+                int xPosition = ((width / 2) - (mAppIcon.getWidth() / 2));
+                ObjectAnimator imageTranslationX = ObjectAnimator.ofFloat(mAppIcon, "translationX", xPosition);
+                ObjectAnimator imageTranslationY = ObjectAnimator.ofFloat(mAppIcon, "translationY", startPosition);
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.playTogether(imageTranslationX, imageTranslationY);
+                animatorSet.setDuration(500);
+                animatorSet.setInterpolator(new DecelerateInterpolator());
+                animatorSet.start();
+                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
+        return view;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mFragmentBackgroundDrawable.startTransition(300);
-    }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-    @Override
-    public void onPause() {
-        mFragmentBackgroundDrawable.reverseTransition(300);
-        super.onPause();
     }
 }
