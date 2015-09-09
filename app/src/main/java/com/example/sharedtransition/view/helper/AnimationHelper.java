@@ -8,11 +8,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 

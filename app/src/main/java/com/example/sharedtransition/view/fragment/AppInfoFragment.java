@@ -1,25 +1,14 @@
 package com.example.sharedtransition.view.fragment;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;

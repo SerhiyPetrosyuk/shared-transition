@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.example.sharedtransition.Constants;
 import com.example.sharedtransition.presenter.implementation.AppsPresenter;
