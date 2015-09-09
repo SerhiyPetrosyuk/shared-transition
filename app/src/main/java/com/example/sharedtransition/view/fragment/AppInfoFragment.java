@@ -69,35 +69,6 @@ public class AppInfoFragment extends Fragment {
         ApplicationInfo applicationInfo = appInfoData.getParcelable(Constants.APP_INFO);
         final int[] imageLocation = appInfoData.getIntArray(Constants.VIEW_POSITION);
 
-        ArgbEvaluator colorEvaluator = new ArgbEvaluator();
-        final ObjectAnimator colorAnimator = ObjectAnimator.ofObject(view, "backgroundColor", colorEvaluator,
-                0, 0);
-        colorAnimator.setObjectValues(Color.TRANSPARENT, Color.WHITE);
-        colorAnimator.setDuration(300);
-        colorAnimator.start();
-
-        colorAnimator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mAppInfoHolder.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
         if (applicationInfo != null && imageLocation != null) {
             mAppIcon.setImageDrawable(applicationInfo.loadIcon(getActivity().getPackageManager()));
             mAppName.setText(applicationInfo.loadLabel(getActivity().getPackageManager()));
@@ -109,28 +80,8 @@ public class AppInfoFragment extends Fragment {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onGlobalLayout() {
-                int[] imagePosition = new int[2];
-                mAppIcon.getLocationOnScreen(imagePosition);
-                int startPosition = imagePosition[0];
-                mAppIcon.setTranslationX(imageLocation[0] - imagePosition[0]);
-                mAppIcon.setTranslationY(imageLocation[1] - imagePosition[1]);
-
-                WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-                Display display = wm.getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                int width = size.x;
-                int height = size.y;
-
-                int xPosition = ((width / 2) - (mAppIcon.getWidth() / 2));
-                ObjectAnimator imageTranslationX = ObjectAnimator.ofFloat(mAppIcon, "translationX", xPosition);
-                ObjectAnimator imageTranslationY = ObjectAnimator.ofFloat(mAppIcon, "translationY", startPosition);
-
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(imageTranslationX, imageTranslationY);
-                animatorSet.setDuration(500);
-                animatorSet.setInterpolator(new DecelerateInterpolator());
-                animatorSet.start();
+                AnimationHelper.animateImageIn(getActivity(), mAppIcon, imageLocation, mAppInfoHolder);
+                AnimationHelper.animateBackground(view);
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });

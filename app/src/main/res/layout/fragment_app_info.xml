@@ -10,6 +10,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:contentDescription="@string/app_name"
+        android:layout_marginTop="16dp"
         android:src="@android:drawable/sym_def_app_icon" />
 
     <LinearLayout
