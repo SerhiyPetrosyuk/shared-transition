@@ -1,4 +1,4 @@
-package com.example.sharedtransition.presenter.implementation;
+package com.example.sharedtransition.presenter.abstraction;
 
 import android.view.View;
 
@@ -16,4 +16,7 @@ public interface AppsPresenter {
 
     void openAppInfo(int position, View imageView);
 
+    void showSelectedImage();
+
+    void hideSelectedImage();
 }

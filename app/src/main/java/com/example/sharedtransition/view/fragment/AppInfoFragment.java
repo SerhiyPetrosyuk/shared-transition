@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.sharedtransition.Application;
 import com.example.sharedtransition.Constants;
 import com.example.sharedtransition.R;
+import com.example.sharedtransition.view.abstraction.MainView;
 import com.example.sharedtransition.view.helper.AnimationHelper;
 
 import butterknife.ButterKnife;
@@ -32,11 +33,12 @@ public class AppInfoFragment extends Fragment {
     TextView mAppDescription;
     @InjectView(R.id.ll_app_info_holder)
     LinearLayout mAppInfoHolder;
+    private MainView mMainView;
 
-
-    public static AppInfoFragment newInstance(Bundle appInfoData) {
+    public static AppInfoFragment newInstance(MainView mainView, Bundle appInfoData) {
         AppInfoFragment appInfoFragment = new AppInfoFragment();
         appInfoFragment.setArguments(appInfoData);
+        appInfoFragment.mMainView = mainView;
         return appInfoFragment;
     }
 
@@ -69,7 +71,8 @@ public class AppInfoFragment extends Fragment {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onGlobalLayout() {
-                AnimationHelper.animateImageIn(getActivity(), mAppIcon, imageLocation, mAppInfoHolder);
+                AnimationHelper.animateImageIn(getActivity(), mAppIcon, imageLocation, mAppInfoHolder,
+                        mMainView);
                 AnimationHelper.animateBackground(view);
                 view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }

@@ -19,4 +19,8 @@ public interface AppListView {
     void showDetailAppInfo(Bundle appData);
 
     int getScreenOffset();
+
+    void showSelectedImage();
+
+    void hideSelectedImage();
 }

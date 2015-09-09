@@ -1,4 +1,4 @@
-package com.example.sharedtransition.presenter.abstraction;
+package com.example.sharedtransition.presenter.abstraction.implementation;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.sharedtransition.Constants;
-import com.example.sharedtransition.presenter.implementation.AppsPresenter;
+import com.example.sharedtransition.presenter.abstraction.AppsPresenter;
 import com.example.sharedtransition.view.abstraction.AppListView;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import javax.inject.Inject;
 public class AppsPresenterImpl implements AppsPresenter {
     private AppListView mView;
     private List<ApplicationInfo> mApplicationInfoList;
+    private View mSelectedView;
 
     @Inject
     public AppsPresenterImpl() {
@@ -48,12 +49,25 @@ public class AppsPresenterImpl implements AppsPresenter {
 
     @Override
     public void openAppInfo(int position, View imageView) {
+        mSelectedView = imageView;
         int [] viewLocation = new int[2];
         imageView.getLocationOnScreen(viewLocation);
         Bundle appData = new Bundle();
         appData.putParcelable(Constants.APP_INFO, mApplicationInfoList.get(position));
         appData.putIntArray(Constants.VIEW_POSITION, viewLocation);
         mView.showDetailAppInfo(appData);
+    }
+
+    @Override
+    public void showSelectedImage() {
+        if (mSelectedView != null)
+            mSelectedView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideSelectedImage() {
+        if (mSelectedView != null)
+            mSelectedView.setVisibility(View.INVISIBLE);
     }
 
     public class AppsLoader extends AsyncTask<Void, Void, List<ApplicationInfo>> {

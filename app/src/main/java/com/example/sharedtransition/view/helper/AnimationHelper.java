@@ -14,13 +14,15 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
+import com.example.sharedtransition.view.abstraction.MainView;
+
 /**
  * Created by Serhiy Petrosyuk on 01.09.15.
  */
 public class AnimationHelper {
 
     public static void animateImageIn(Activity activity, ImageView image, int[] imageLocation,
-                                      final View viewToShowAfterAnimation) {
+                                      final View viewToShowAfterAnimation, final MainView listener) {
 
         int[] imagePosition = new int[2];
         image.getLocationOnScreen(imagePosition);
@@ -46,7 +48,7 @@ public class AnimationHelper {
         animatorSet.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                listener.onStartTransitionOn();
             }
 
             @Override

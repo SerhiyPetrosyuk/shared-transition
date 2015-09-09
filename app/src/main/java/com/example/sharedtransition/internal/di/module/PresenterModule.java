@@ -1,7 +1,7 @@
 package com.example.sharedtransition.internal.di.module;
 
-import com.example.sharedtransition.presenter.abstraction.AppsPresenterImpl;
-import com.example.sharedtransition.presenter.implementation.AppsPresenter;
+import com.example.sharedtransition.presenter.abstraction.implementation.AppsPresenterImpl;
+import com.example.sharedtransition.presenter.abstraction.AppsPresenter;
 
 import javax.inject.Singleton;
 

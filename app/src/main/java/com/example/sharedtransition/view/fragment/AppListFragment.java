@@ -14,8 +14,9 @@ import android.widget.ProgressBar;
 
 import com.example.sharedtransition.Application;
 import com.example.sharedtransition.R;
-import com.example.sharedtransition.presenter.implementation.AppsPresenter;
+import com.example.sharedtransition.presenter.abstraction.AppsPresenter;
 import com.example.sharedtransition.view.abstraction.AppListView;
+import com.example.sharedtransition.view.abstraction.MainView;
 import com.example.sharedtransition.view.activity.MainActivity;
 import com.example.sharedtransition.view.adapter.AppsAdapter;
 
@@ -36,9 +37,12 @@ public class AppListFragment extends Fragment implements AppListView {
     AppsPresenter mPresenter;
     private View mRootView;
     private int mTopOffset;
+    private MainView mMainView;
 
-    public static AppListFragment newInstance() {
-        return new AppListFragment();
+    public static AppListFragment newInstance(MainView mainView) {
+        AppListFragment appListFragment = new AppListFragment();
+        appListFragment.mMainView = mainView;
+        return appListFragment;
     }
 
     public AppListFragment() {
@@ -102,12 +106,22 @@ public class AppListFragment extends Fragment implements AppListView {
 
     @Override
     public void showDetailAppInfo(Bundle appData) {
-        ((MainActivity)getActivity()).addFragment(AppInfoFragment.newInstance(appData));
+        ((MainActivity) getActivity()).addFragment(AppInfoFragment.newInstance(mMainView, appData));
     }
 
     @Override
     public int getScreenOffset() {
         return mTopOffset;
+    }
+
+    @Override
+    public void showSelectedImage() {
+        mPresenter.showSelectedImage();
+    }
+
+    @Override
+    public void hideSelectedImage() {
+        mPresenter.hideSelectedImage();
     }
 
     @Override
